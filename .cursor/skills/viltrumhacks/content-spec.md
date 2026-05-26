@@ -139,7 +139,10 @@ A: Yes — breakfast, lunch, dinner, snacks, and midnight fuel are included.
 A: Laptop, charger, student ID, toiletries, a water bottle, and optionally a sleeping bag for nap areas.
 
 **Q: How does QR check-in work?**
-A: After you apply, you'll receive a unique check-in code and QR. Show it at registration — staff validate it on our check-in page.
+A: After you apply, you'll receive a unique check-in code and QR. Show it at registration — staff scan or enter the code on the volunteer check-in page.
+
+**Q: How do I try the demo login?**
+A: This practice app includes demo personas (Mark, Eve, Allen) at Demo login. Mark and Eve show attendee tickets; Allen opens the staff scanner. On first visit each device seeds the same three demo applications so two phones can test check-in with codes DEMO0001–DEMO0003. New applications and check-in status stay in this browser only — they do not sync across devices.
 
 ### Eligibility
 **Q: Who can attend?**
@@ -153,6 +156,15 @@ A: The event is free — there's nothing to refund.
 
 **Q: Is the venue accessible?**
 A: Pacific Heights Campus Center has step-free access and accessible restrooms. Contact us before the event for specific accommodations.
+
+## Footer links
+
+- Volunteer check-in (demo) → `/demo/login?next=/check-in`
+- Demo login → `/demo/login`
+
+## Demo limitations (canonical)
+
+Practice app — browser-only data. Applications live in `localStorage` per device and origin. On first visit, three seed attendees (Mark, Eve, Allen) are created with codes DEMO0001–DEMO0003 so two phones can demo check-in without a server. New applications from `/apply` on one device are not visible on another. Check-in status (`checkedInAt`) is also per-browser. Demo login is for UX testing only, not real authentication.
 
 ## Footer
 

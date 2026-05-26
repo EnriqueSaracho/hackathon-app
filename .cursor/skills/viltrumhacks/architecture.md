@@ -12,19 +12,24 @@ src/
     apply/success/page.tsx
     mentor/page.tsx
     volunteer/page.tsx
+    demo/login/page.tsx
+    my-ticket/page.tsx
     check-in/page.tsx
     debug/export/page.tsx
   components/
     layout/SiteNav.tsx, Footer.tsx, SiteLayout.tsx, StorageProvider.tsx
-    home/Hero.tsx, Countdown.tsx, StatCard.tsx, ValueCard.tsx,
-          FAQAccordion.tsx, SponsorBadge.tsx, PastProjectCard.tsx, ScheduleOutline.tsx
+    auth/DemoAuthGate.tsx, DemoLoginPanel.tsx
+    ticket/TicketView.tsx, MyTicketContent.tsx
+    home/...
     forms/ApplicationForm.tsx
     qr/QRDisplay.tsx
-    check-in/CheckInPanel.tsx
+    check-in/CheckInPanel.tsx, QrScanner.tsx, CheckInStaffContent.tsx
   content/site.ts
   lib/
     types.ts
     storage.ts
+    demo-session.ts
+    demo-personas.ts
     ids.ts
     qr.ts
     validation.ts
@@ -47,6 +52,17 @@ type Application = {
   dietaryNotes?: string;
   teamPreference?: "solo" | "have-team" | "find-team";
   agreedToCoC: true;
+  checkedInAt?: string;  // ISO
+  checkedInBy?: string;  // e.g. "allen-demo"
+};
+
+type DemoPersonaId = "mark" | "eve" | "allen";
+type SessionRole = "attendee" | "staff";
+
+type DemoSession = {
+  personaId: DemoPersonaId;
+  sessionRole: SessionRole;
+  applicationId: string;
 };
 
 type QRPayload = {
@@ -57,28 +73,40 @@ type QRPayload = {
 };
 ```
 
-## localStorage contract
+## Storage contracts
 
-| Key | Shape |
-|-----|-------|
-| `viltrumhacks:applications:v1` | `Record<string, Application>` keyed by applicationId |
-| `viltrumhacks:meta:v1` | `{ seeded: boolean }` |
+| Key | Storage | Shape |
+|-----|---------|-------|
+| `viltrumhacks:applications:v1` | localStorage | `Record<string, Application>` |
+| `viltrumhacks:meta:v1` | localStorage | `{ seeded: boolean }` |
+| `viltrumhacks:demo-session:v1` | sessionStorage | `DemoSession` |
 
 ### API (`storage.ts`)
 
-- `getApplications(): Record<string, Application>`
-- `getApplication(id: string): Application | null`
-- `saveApplication(app: Application): void`
-- `findByCheckInCode(code: string): Application | null` — case-insensitive
-- `emailExists(email: string): boolean` — for duplicate warning
-- `seedApplications(): void` — runs once if meta.seeded is false
-- `exportApplicationsJson(): string`
+- `getApplications()`, `getApplication(id)`, `saveApplication(app)`
+- `findByCheckInCode(code)` — case-insensitive
+- `emailExists(email)`
+- `seedApplications()`
+- `markCheckedIn(applicationId, checkedInBy?)` — idempotent if already checked in
+- `exportApplicationsJson()`
+
+### API (`demo-session.ts`)
+
+- `getDemoSession()`, `setDemoSession()`, `clearDemoSession()`, `hasSessionRole(role)`
+
+## Demo session model
+
+- Persona picker at `/demo/login` writes `sessionStorage`
+- `DemoAuthGate` (client-only) protects `/my-ticket` (attendee) and `/check-in` (staff)
+- Wrong role redirects to the other home route
+- No middleware — UX gate only, not security
 
 ## Seed strategy
 
 On first client mount, `StorageProvider` calls `seedApplications()`:
 - If `viltrumhacks:meta:v1.seeded` is true, skip
-- Else merge 3 seed applications from content-spec, set meta.seeded = true
+- Else merge 3 seed applications, set meta.seeded = true
+- Seeds do not include `checkedInAt` (demo can check in fresh)
 
 ## QR encode/decode
 
@@ -90,13 +118,9 @@ On first client mount, `StorageProvider` calls `seedApplications()`:
 3. Else treat as raw 8-char checkInCode
 4. Lookup via `findByCheckInCode`
 
-**Deep link:** `/check-in?code=DEMO0001` — read in CheckInPanel on mount
+**Camera:** `html5-qrcode` decodes to same string → `parseCheckInInput`
 
-## ID generation (`ids.ts`)
-
-- `applicationId`: `VH-2026-` + 4 chars from `ABCDEFGHJKLMNPQRSTUVWXYZ23456789`
-- `checkInCode`: 8 chars from same charset
-- Collision: re-roll if ID exists (unlikely)
+**Deep link:** `/check-in?code=DEMO0001` — prefill in CheckInPanel (staff session required)
 
 ## Error states
 
@@ -106,17 +130,20 @@ On first client mount, `StorageProvider` calls `seedApplications()`:
 | Duplicate email | Yellow warning banner, still allow submit |
 | Success page missing id | Show error + link to /apply |
 | Check-in invalid code | Red INVALID panel |
-| Check-in valid | Green VALID + fullName + role |
+| Check-in valid, not checked in | Green VALID + Check in |
+| Already checked in | Amber panel with timestamp |
+| No demo session on gated route | Redirect to `/demo/login?next=...` |
 | localStorage unavailable | Show error message on forms |
 
 ## SSR / hydration
 
-- Never access localStorage in server components
-- `storage.ts` functions return empty/null when `typeof window === "undefined"`
-- QR canvas generation only in client `QRDisplay` via useEffect
+- Never access localStorage/sessionStorage in server components
+- `storage.ts` / `demo-session.ts` return empty/null when `typeof window === "undefined"`
+- QR canvas and camera only in client components
 
 ## Ambiguous decisions (locked)
 
-- Mentor/volunteer success uses same `/apply/success?id=` route (not separate pages)
-- QR encodes JSON string, not URL (check-in page parses both JSON and raw code)
-- `teamPreference` only on hacker role; optional on Application type
+- Mentor/volunteer success uses same `/apply/success?id=` route
+- QR encodes JSON string, not URL
+- Allen demo persona = staff scanner; Mark/Eve = attendees
+- `checkedInAt` per-browser is acceptable for practice app

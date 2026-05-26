@@ -9,6 +9,7 @@
 | Styling | Tailwind CSS v4 | Utility-first, fast iteration |
 | Forms | React Hook Form + Zod | Validation without heavy boilerplate |
 | QR | `qrcode` | Client-side PNG generation for download |
+| QR scan | `html5-qrcode` | Staff camera scanner on `/check-in` |
 | Icons | lucide-react | Lightweight SVG icons |
 | Dates | Native `Intl` + optional date-fns | Countdown and formatting |
 

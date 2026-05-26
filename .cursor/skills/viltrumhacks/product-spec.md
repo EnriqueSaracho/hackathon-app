@@ -9,7 +9,16 @@ University student in BC evaluating whether to attend. Needs clarity on eligibil
 Wants a shorter signup with role-specific fields. Same check-in QR flow as hackers.
 
 ### Event organizer (check-in)
-Needs to validate an attendee at the door by code or QR payload. No admin dashboard required.
+Needs to validate an attendee at the door by code or QR payload. Demo uses Allen persona as staff scanner.
+
+### Demo test users (practice app)
+| Demo login | Application | Session role | Primary UI |
+|------------|-------------|--------------|------------|
+| Mark | VH-2026-SEED / DEMO0001 | attendee | `/my-ticket` |
+| Eve | VH-2026-SD02 / DEMO0002 | attendee | `/my-ticket` |
+| Allen | VH-2026-SD03 / DEMO0003 | staff | `/check-in` |
+
+Application `role` (hacker/mentor/volunteer) = event registration. Session `role` (attendee/staff) = app permissions.
 
 ## User journeys
 
@@ -17,11 +26,17 @@ Needs to validate an attendee at the door by code or QR payload. No admin dashbo
 1. Visitor lands on `/`, reads about event, clicks Apply
 2. Fills `/apply` form, agrees to Code of Conduct
 3. Redirected to `/apply/success?id=VH-2026-XXXX` with QR and check-in code
-4. At event, staff opens `/check-in`, pastes code → VALID + name
+4. Staff (Allen demo) opens `/check-in`, scans or enters code → VALID → Check in
+
+### Demo two-phone check-in
+1. Phone A: `/demo/login` → Allen → `/check-in`
+2. Phone B: `/demo/login` → Mark or Eve → `/my-ticket` → show QR
+3. Phone A: scan/enter code → Check in → success
+4. Phone A: same code → Already checked in
 
 ### Demo without applying
 1. First visit seeds 3 applications in localStorage
-2. `/check-in` with seed code `DEMO0001` returns VALID immediately
+2. `/demo/login` as Mark → `/my-ticket` with DEMO0001 QR
 
 ## Page map
 
@@ -32,7 +47,9 @@ Needs to validate an attendee at the door by code or QR payload. No admin dashbo
 | `/apply/success` | Confirmation | Summary, QR, download, copy code |
 | `/mentor` | Form | Mentor application (shorter) |
 | `/volunteer` | Form | Volunteer application (shorter) |
-| `/check-in` | Tool | Code validation for staff |
+| `/demo/login` | Demo auth | Persona picker (Mark / Eve / Allen) |
+| `/my-ticket` | Demo attendee | Ticket + QR for logged-in attendee |
+| `/check-in` | Staff scanner | Camera + manual; check-in action (staff only) |
 | `/debug/export` | Utility | Export all local applications as JSON |
 
 ## Acceptance criteria
@@ -44,7 +61,7 @@ Needs to validate an attendee at the door by code or QR payload. No admin dashbo
 - Primary CTA: Apply as Hacker → `/apply`
 - Secondary CTAs: Mentor → `/mentor`, Volunteer → `/volunteer`
 - Sponsor section with mailto `sponsors@viltrumhacks.test`
-- Footer: land acknowledgment, contact emails, Event Check-In → `/check-in`
+- Footer: Volunteer check-in (demo) → `/demo/login?next=/check-in`, Demo login → `/demo/login`
 
 ### `/apply`
 - Fields: fullName, email, school, experienceLevel, dietaryNotes (optional), teamPreference, agreedToCoC
@@ -62,19 +79,43 @@ Needs to validate an attendee at the door by code or QR payload. No admin dashbo
 - Fields: fullName, email, school, experienceLevel, dietaryNotes (optional), agreedToCoC
 - Same ID/code generation and redirect to `/apply/success?id=`
 
+### `/demo/login`
+- Three persona buttons; optional `?next=` redirect after login
+- Sign out / switch persona
+- Not real authentication
+
+### `/my-ticket`
+- Requires attendee session (Mark or Eve)
+- Shows seed or linked application ticket + QR
+
 ### `/check-in`
-- Text input for check-in code (8 chars, case-insensitive)
+- Requires staff session (Allen)
+- Camera QR scan + manual code/JSON entry
+- VALID → attendee details → Check in → sets `checkedInAt`
+- Repeat lookup → Already checked in with timestamp
 - Optional `?code=` URL prefill
-- Accepts pasted QRPayload JSON
-- Shows VALID (green) or INVALID (red) with attendee name and role on valid
 
 ### `/debug/export`
 - Button downloads `viltrumhacks-applications.json`
 
+## Check-in states (staff scanner)
+
+| State | UI |
+|-------|-----|
+| INVALID | Red panel |
+| VALID (pending) | Green panel + details + Check in button |
+| Checked in (success) | Green confirmation with timestamp |
+| Already checked in | Amber panel with existing `checkedInAt` |
+
+## Demo limitations
+
+Practice app — browser-only data. Seed applications sync across devices only for the three demo personas on first visit (same codes). New `/apply` submissions and `checkedInAt` are per-browser only.
+
 ## Out of scope
 
-- Database, user accounts, email notifications
+- Production hackathon ops, real user database, email notifications
+- Cross-device sync for new applications or check-in status
 - Devpost, Discord, external registration portals
 - Photo/video galleries, copyrighted character assets
-- Camera-based QR scanning (manual entry only for v1)
+- Full NextAuth / individual volunteer accounts
 - Payment / refunds (event is free)
