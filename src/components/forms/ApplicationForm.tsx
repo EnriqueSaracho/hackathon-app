@@ -4,7 +4,7 @@ import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import type { ApplicationRole } from "@/lib/types";
+import type { Application, ApplicationRole } from "@/lib/types";
 import { updateSession } from "@/lib/auth";
 import {
   emailExists,
@@ -71,22 +71,21 @@ export function ApplicationForm({ role }: { role: ApplicationRole }) {
       applicationId = generateApplicationId();
     }
 
-    const application = {
+    const base = {
       applicationId,
       checkInCode: generateCheckInCode(),
-      role,
       createdAt: new Date().toISOString(),
       fullName: data.fullName,
       email: data.email,
-      school: data.school,
       experienceLevel: data.experienceLevel,
       dietaryNotes: data.dietaryNotes,
-      teamPreference:
-        role === "hacker" && "teamPreference" in data
-          ? data.teamPreference
-          : undefined,
       agreedToCoC: true as const,
     };
+
+    const application: Application =
+      role === "hacker"
+        ? { ...base, role: "hacker", school: (data as HackerFormData).school, teamPreference: (data as HackerFormData).teamPreference }
+        : { ...base, role: role as "mentor" | "volunteer" };
 
     saveApplication(application);
     updateSession({ applicationId });
@@ -130,9 +129,18 @@ export function ApplicationForm({ role }: { role: ApplicationRole }) {
         />
       </Field>
 
-      <Field label="School" error={errors.school?.message}>
-        <input {...register("school")} className="input-field" />
-      </Field>
+      {role === "hacker" && (
+        <Field
+          label="School"
+          error={
+            "school" in errors
+              ? (errors as { school?: { message?: string } }).school?.message
+              : undefined
+          }
+        >
+          <input {...register("school" as keyof FormData)} className="input-field" />
+        </Field>
+      )}
 
       <Field label="Experience level" error={errors.experienceLevel?.message}>
         <select {...register("experienceLevel")} className="input-field">

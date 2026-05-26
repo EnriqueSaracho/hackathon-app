@@ -184,10 +184,12 @@ export function CheckInPanel() {
               <dt className="text-text-muted">Event role</dt>
               <dd className="capitalize font-medium">{application.role}</dd>
             </div>
-            <div className="flex justify-between">
-              <dt className="text-text-muted">School</dt>
-              <dd className="font-medium">{application.school}</dd>
-            </div>
+            {application.role === "hacker" && (
+              <div className="flex justify-between">
+                <dt className="text-text-muted">School</dt>
+                <dd className="font-medium">{application.school}</dd>
+              </div>
+            )}
             <div className="flex justify-between">
               <dt className="text-text-muted">Application ID</dt>
               <dd className="font-mono text-xs">{application.applicationId}</dd>

@@ -3,7 +3,6 @@ import { z } from "zod";
 const baseFields = {
   fullName: z.string().min(2, "Name must be at least 2 characters"),
   email: z.string().email("Enter a valid email"),
-  school: z.string().min(2, "School is required"),
   experienceLevel: z.enum(["beginner", "intermediate", "advanced"]),
   dietaryNotes: z.string().optional(),
   agreedToCoC: z
@@ -15,6 +14,7 @@ const baseFields = {
 
 export const hackerSchema = z.object({
   ...baseFields,
+  school: z.string().min(2, "School is required"),
   teamPreference: z.enum(["solo", "have-team", "find-team"]),
 });
 

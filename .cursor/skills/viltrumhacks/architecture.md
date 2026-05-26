@@ -40,21 +40,30 @@ src/
 ```ts
 type ApplicationRole = "hacker" | "mentor" | "volunteer";
 
-type Application = {
+type BaseApplication = {
   applicationId: string;
   checkInCode: string;
-  role: ApplicationRole;
   createdAt: string;
   fullName: string;
   email: string;
-  school: string;
   experienceLevel: "beginner" | "intermediate" | "advanced";
   dietaryNotes?: string;
-  teamPreference?: "solo" | "have-team" | "find-team";
   agreedToCoC: true;
   checkedInAt?: string;  // ISO
   checkedInBy?: string;  // e.g. "allen-demo"
 };
+
+// school and teamPreference are hacker-only
+type HackerApplication = BaseApplication & {
+  role: "hacker";
+  school: string;
+  teamPreference: "solo" | "have-team" | "find-team";
+};
+
+type MentorApplication = BaseApplication & { role: "mentor" };
+type VolunteerApplication = BaseApplication & { role: "volunteer" };
+
+type Application = HackerApplication | MentorApplication | VolunteerApplication;
 
 type DemoPersonaId = "mark" | "eve" | "allen";
 type SessionRole = "attendee" | "staff";

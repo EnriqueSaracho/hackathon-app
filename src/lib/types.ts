@@ -4,21 +4,32 @@ export type ExperienceLevel = "beginner" | "intermediate" | "advanced";
 
 export type TeamPreference = "solo" | "have-team" | "find-team";
 
-export type Application = {
+type BaseApplication = {
   applicationId: string;
   checkInCode: string;
-  role: ApplicationRole;
   createdAt: string;
   fullName: string;
   email: string;
-  school: string;
   experienceLevel: ExperienceLevel;
   dietaryNotes?: string;
-  teamPreference?: TeamPreference;
   agreedToCoC: true;
   checkedInAt?: string;
   checkedInBy?: string;
 };
+
+export type HackerApplication = BaseApplication & {
+  role: "hacker";
+  school: string;
+  teamPreference: TeamPreference;
+};
+
+export type MentorApplication = BaseApplication & { role: "mentor" };
+export type VolunteerApplication = BaseApplication & { role: "volunteer" };
+
+export type Application =
+  | HackerApplication
+  | MentorApplication
+  | VolunteerApplication;
 
 export type SessionRole = "attendee" | "staff" | "organizer";
 

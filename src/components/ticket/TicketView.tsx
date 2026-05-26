@@ -30,10 +30,12 @@ export function TicketView({
           <dt className="text-text-muted">Role</dt>
           <dd className="font-medium capitalize">{application.role}</dd>
         </div>
-        <div className="flex justify-between py-2">
-          <dt className="text-text-muted">School</dt>
-          <dd className="font-medium">{application.school}</dd>
-        </div>
+        {application.role === "hacker" && (
+          <div className="flex justify-between py-2">
+            <dt className="text-text-muted">School</dt>
+            <dd className="font-medium">{application.school}</dd>
+          </div>
+        )}
       </dl>
 
       <QRDisplay application={application} />

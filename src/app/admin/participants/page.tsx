@@ -34,10 +34,10 @@ function buildCsv(apps: Application[]): string {
     a.fullName,
     a.email,
     a.role,
-    a.school,
+    a.role === "hacker" ? a.school : "",
     a.experienceLevel,
     a.dietaryNotes ?? "",
-    a.teamPreference ?? "",
+    a.role === "hacker" ? a.teamPreference : "",
     a.checkedInAt ? `Checked in ${a.checkedInAt}` : "Not checked in",
     a.applicationId,
   ]);
@@ -147,7 +147,9 @@ function AdminParticipantsContent() {
                   <td className="whitespace-nowrap px-4 py-3 capitalize">
                     {app.role}
                   </td>
-                  <td className="whitespace-nowrap px-4 py-3">{app.school}</td>
+                  <td className="whitespace-nowrap px-4 py-3">
+                    {app.role === "hacker" ? app.school : "—"}
+                  </td>
                   <td className="whitespace-nowrap px-4 py-3 capitalize">
                     {app.experienceLevel}
                   </td>
@@ -155,7 +157,7 @@ function AdminParticipantsContent() {
                     {app.dietaryNotes || "—"}
                   </td>
                   <td className="whitespace-nowrap px-4 py-3 capitalize">
-                    {app.teamPreference || "—"}
+                    {app.role === "hacker" ? app.teamPreference : "—"}
                   </td>
                   <td className="whitespace-nowrap px-4 py-3">
                     {app.checkedInAt ? (
