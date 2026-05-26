@@ -33,7 +33,7 @@ function getAllowedDevOrigins(): string[] {
 const nextConfig: NextConfig = {
   output: "export",
   basePath:
-    process.env.NODE_ENV === "production" ? "/hackathon-app-m1" : "",
+    process.env.NODE_ENV === "production" ? "/hackathon-app" : "",
   images: { unoptimized: true },
   reactCompiler: true,
   allowedDevOrigins: getAllowedDevOrigins(),
