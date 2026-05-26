@@ -54,6 +54,22 @@ export function MyTicketContent() {
         heading="My ticket"
         subheading="Show this QR or code at registration."
       />
+      {(session?.role === "staff" || session?.role === "organizer") && (
+        <Link
+          href="/check-in"
+          className="block rounded-lg border border-accent-yellow/50 bg-accent-yellow/10 px-4 py-3 text-center text-sm font-medium text-navy-900 transition hover:bg-accent-yellow/20"
+        >
+          You&apos;re a volunteer &mdash; Open Check-in Scanner
+        </Link>
+      )}
+      {session?.role === "organizer" && (
+        <Link
+          href="/admin/participants"
+          className="block rounded-lg border border-accent-yellow/50 bg-accent-yellow/10 px-4 py-3 text-center text-sm font-medium text-navy-900 transition hover:bg-accent-yellow/20"
+        >
+          Open Admin Dashboard
+        </Link>
+      )}
     </div>
   );
 }

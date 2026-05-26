@@ -115,6 +115,7 @@ function SignupContent() {
           <select {...register("role")} className="input-field">
             <option value="attendee">Attendee</option>
             <option value="staff">Volunteer / Staff</option>
+            <option value="organizer">Organizer</option>
           </select>
           {errors.role && (
             <p className="mt-1 text-sm text-error">{errors.role.message}</p>

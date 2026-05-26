@@ -101,6 +101,17 @@ const SEED_APPLICATIONS: Application[] = [
     experienceLevel: "beginner",
     agreedToCoC: true,
   },
+  {
+    applicationId: "VH-2026-SD04",
+    checkInCode: "DEMO0004",
+    role: "volunteer",
+    createdAt: "2025-08-01T12:00:00.000Z",
+    fullName: "Cecil Stedman (Demo)",
+    email: "cecil@viltrumhacks.test",
+    school: "Global Defense Agency",
+    experienceLevel: "advanced",
+    agreedToCoC: true,
+  },
 ];
 
 export function seedApplications(): void {

@@ -125,6 +125,10 @@ function LoginContent() {
             <span className="text-navy-900">allen@viltrumhacks.test</span> /
             allen &mdash; staff (volunteer scanner)
           </li>
+          <li>
+            <span className="text-navy-900">cecil@viltrumhacks.test</span> /
+            cecil &mdash; organizer
+          </li>
         </ul>
       </div>
     </div>

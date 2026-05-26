@@ -5,6 +5,12 @@ import { useRouter } from "next/navigation";
 import { useAuth } from "@/components/auth/AuthProvider";
 import type { SessionRole } from "@/lib/types";
 
+const ROLE_RANK: Record<SessionRole, number> = {
+  attendee: 0,
+  staff: 1,
+  organizer: 2,
+};
+
 type AuthGateProps = {
   requiredRole: SessionRole;
   children: React.ReactNode;
@@ -29,8 +35,12 @@ export function AuthGate({ requiredRole, children }: AuthGateProps) {
       return;
     }
 
-    if (session.role !== requiredRole) {
-      router.replace(session.role === "staff" ? "/check-in" : "/my-ticket");
+    const authorized = ROLE_RANK[session.role] >= ROLE_RANK[requiredRole];
+
+    if (!authorized) {
+      if (session.role === "organizer") router.replace("/admin/participants");
+      else if (session.role === "staff") router.replace("/check-in");
+      else router.replace("/my-ticket");
       return;
     }
 

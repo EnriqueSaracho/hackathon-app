@@ -10,12 +10,49 @@ function HeroCTAs() {
 
   if (session?.applicationId) {
     return (
-      <Link
-        href="/my-ticket"
-        className="rounded-lg bg-accent-yellow px-6 py-3 font-semibold text-navy-950 transition hover:brightness-110"
-      >
-        View My Ticket
-      </Link>
+      <>
+        <Link
+          href="/my-ticket"
+          className="rounded-lg bg-accent-yellow px-6 py-3 font-semibold text-navy-950 transition hover:brightness-110"
+        >
+          View My Ticket
+        </Link>
+        {(session.role === "staff" || session.role === "organizer") && (
+          <Link
+            href="/check-in"
+            className="rounded-lg border border-white/30 px-6 py-3 font-semibold text-white transition hover:border-accent-yellow hover:text-accent-yellow"
+          >
+            Open Scanner
+          </Link>
+        )}
+        {session.role === "organizer" && (
+          <Link
+            href="/admin/participants"
+            className="rounded-lg border border-white/30 px-6 py-3 font-semibold text-white transition hover:border-accent-yellow hover:text-accent-yellow"
+          >
+            Admin Dashboard
+          </Link>
+        )}
+      </>
+    );
+  }
+
+  if (session?.role === "organizer") {
+    return (
+      <>
+        <Link
+          href="/check-in"
+          className="rounded-lg bg-accent-yellow px-6 py-3 font-semibold text-navy-950 transition hover:brightness-110"
+        >
+          Go to Check-in
+        </Link>
+        <Link
+          href="/admin/participants"
+          className="rounded-lg border border-white/30 px-6 py-3 font-semibold text-white transition hover:border-accent-yellow hover:text-accent-yellow"
+        >
+          Admin Dashboard
+        </Link>
+      </>
     );
   }
 

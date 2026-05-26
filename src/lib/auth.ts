@@ -134,6 +134,13 @@ const DEMO_ACCOUNTS: UserAccount[] = [
     role: "staff",
     applicationId: "VH-2026-SD03",
   },
+  {
+    email: "cecil@viltrumhacks.test",
+    password: "cecil",
+    fullName: "Cecil Stedman",
+    role: "organizer",
+    applicationId: "VH-2026-SD04",
+  },
 ];
 
 export function seedDemoAccounts(): void {

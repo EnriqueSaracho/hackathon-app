@@ -20,7 +20,7 @@ export type Application = {
   checkedInBy?: string;
 };
 
-export type SessionRole = "attendee" | "staff";
+export type SessionRole = "attendee" | "staff" | "organizer";
 
 export type UserAccount = {
   email: string;

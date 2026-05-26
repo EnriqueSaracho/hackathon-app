@@ -188,14 +188,6 @@ export function CheckInPanel() {
               <dt className="text-text-muted">School</dt>
               <dd className="font-medium">{application.school}</dd>
             </div>
-            {application.dietaryNotes && (
-              <div className="flex justify-between gap-4">
-                <dt className="shrink-0 text-text-muted">Dietary</dt>
-                <dd className="text-right font-medium">
-                  {application.dietaryNotes}
-                </dd>
-              </div>
-            )}
             <div className="flex justify-between">
               <dt className="text-text-muted">Application ID</dt>
               <dd className="font-mono text-xs">{application.applicationId}</dd>
