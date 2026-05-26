@@ -10,7 +10,7 @@ function isBrowser(): boolean {
 export function getApplications(): Record<string, Application> {
   if (!isBrowser()) return {};
   try {
-    const raw = localStorage.getItem(APPLICATIONS_KEY);
+    const raw = sessionStorage.getItem(APPLICATIONS_KEY);
     return raw ? (JSON.parse(raw) as Record<string, Application>) : {};
   } catch {
     return {};
@@ -25,7 +25,7 @@ export function saveApplication(app: Application): void {
   if (!isBrowser()) return;
   const apps = getApplications();
   apps[app.applicationId] = app;
-  localStorage.setItem(APPLICATIONS_KEY, JSON.stringify(apps));
+  sessionStorage.setItem(APPLICATIONS_KEY, JSON.stringify(apps));
 }
 
 export function findByCheckInCode(code: string): Application | null {
@@ -105,7 +105,7 @@ const SEED_APPLICATIONS: Application[] = [
 export function seedApplications(): void {
   if (!isBrowser()) return;
   try {
-    const metaRaw = localStorage.getItem(META_KEY);
+    const metaRaw = sessionStorage.getItem(META_KEY);
     const meta = metaRaw ? JSON.parse(metaRaw) : {};
     if (meta.seeded) return;
 
@@ -115,8 +115,8 @@ export function seedApplications(): void {
         apps[seed.applicationId] = seed;
       }
     }
-    localStorage.setItem(APPLICATIONS_KEY, JSON.stringify(apps));
-    localStorage.setItem(META_KEY, JSON.stringify({ seeded: true }));
+    sessionStorage.setItem(APPLICATIONS_KEY, JSON.stringify(apps));
+    sessionStorage.setItem(META_KEY, JSON.stringify({ seeded: true }));
   } catch {
     // ignore storage errors
   }
