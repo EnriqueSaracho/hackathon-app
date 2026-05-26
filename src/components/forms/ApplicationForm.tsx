@@ -103,7 +103,7 @@ export function ApplicationForm({ role }: { role: ApplicationRole }) {
         Apply as {roleLabels[role]}
       </h1>
 
-      <RoleSwitcher currentRole={role} />
+      {session?.role === "staff" && <RoleSwitcher currentRole={role} />}
 
       {duplicateWarning && (
         <p className="rounded-lg border border-accent-yellow/50 bg-accent-yellow/10 px-4 py-3 text-sm text-navy-900">
