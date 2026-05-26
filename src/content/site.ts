@@ -213,9 +213,9 @@ export const faqs: FAQItem[] = [
   },
   {
     category: "Logistics",
-    question: "How do I try the demo login?",
+    question: "How do I try the demo accounts?",
     answer:
-      "This practice app includes demo personas (Mark, Eve, Allen) at Demo login. Mark and Eve show attendee tickets; Allen opens the staff scanner. On first visit each device seeds the same three demo applications so two phones can test check-in with codes DEMO0001–DEMO0003. New applications and check-in status stay in this browser only — they do not sync across devices.",
+      "This practice app includes three pre-seeded accounts you can log into: Mark (mark@viltrumhacks.test / mark) and Eve (eve@viltrumhacks.test / eve) as attendees, and Allen (allen@viltrumhacks.test / allen) as a volunteer scanner. You can also sign up for your own account. All data stays in this browser only — it does not sync across devices.",
   },
   {
     category: "Eligibility",

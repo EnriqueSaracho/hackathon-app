@@ -1,14 +1,14 @@
 "use client";
 
-import { DemoAuthGate } from "@/components/auth/DemoAuthGate";
+import { AuthGate } from "@/components/auth/AuthGate";
 import { CheckInStaffContent } from "@/components/check-in/CheckInStaffContent";
 
 export default function CheckInPage() {
   return (
     <div className="bg-off-white px-6 py-16">
-      <DemoAuthGate requiredRole="staff">
+      <AuthGate requiredRole="staff">
         <CheckInStaffContent />
-      </DemoAuthGate>
+      </AuthGate>
     </div>
   );
 }

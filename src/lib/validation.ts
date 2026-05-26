@@ -25,3 +25,18 @@ export const volunteerSchema = z.object({ ...baseFields });
 export type HackerFormData = z.infer<typeof hackerSchema>;
 export type MentorFormData = z.infer<typeof mentorSchema>;
 export type VolunteerFormData = z.infer<typeof volunteerSchema>;
+
+export const loginSchema = z.object({
+  email: z.string().email("Enter a valid email"),
+  password: z.string().min(1, "Password is required"),
+});
+
+export const signupSchema = z.object({
+  fullName: z.string().min(2, "Name must be at least 2 characters"),
+  email: z.string().email("Enter a valid email"),
+  password: z.string().min(4, "Password must be at least 4 characters"),
+  role: z.enum(["attendee", "staff"]),
+});
+
+export type LoginFormData = z.infer<typeof loginSchema>;
+export type SignupFormData = z.infer<typeof signupSchema>;

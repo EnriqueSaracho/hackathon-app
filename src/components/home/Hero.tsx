@@ -2,7 +2,57 @@
 
 import Link from "next/link";
 import { hero, site } from "@/content/site";
+import { useAuth } from "@/components/auth/AuthProvider";
 import { Countdown } from "./Countdown";
+
+function HeroCTAs() {
+  const { session } = useAuth();
+
+  if (session?.applicationId) {
+    return (
+      <Link
+        href="/my-ticket"
+        className="rounded-lg bg-accent-yellow px-6 py-3 font-semibold text-navy-950 transition hover:brightness-110"
+      >
+        View My Ticket
+      </Link>
+    );
+  }
+
+  if (session?.role === "staff") {
+    return (
+      <Link
+        href="/check-in"
+        className="rounded-lg bg-accent-yellow px-6 py-3 font-semibold text-navy-950 transition hover:brightness-110"
+      >
+        Go to Check-in
+      </Link>
+    );
+  }
+
+  return (
+    <>
+      <Link
+        href="/apply"
+        className="rounded-lg bg-accent-yellow px-6 py-3 font-semibold text-navy-950 transition hover:brightness-110"
+      >
+        Apply as Hacker
+      </Link>
+      <Link
+        href="/mentor"
+        className="rounded-lg border border-white/30 px-6 py-3 font-semibold text-white transition hover:border-accent-yellow hover:text-accent-yellow"
+      >
+        Become a Mentor
+      </Link>
+      <Link
+        href="/volunteer"
+        className="rounded-lg border border-white/30 px-6 py-3 font-semibold text-white transition hover:border-accent-yellow hover:text-accent-yellow"
+      >
+        Volunteer
+      </Link>
+    </>
+  );
+}
 
 export function Hero() {
   return (
@@ -26,24 +76,7 @@ export function Hero() {
         </div>
 
         <div className="mt-10 flex flex-wrap gap-4">
-          <Link
-            href="/apply"
-            className="rounded-lg bg-accent-yellow px-6 py-3 font-semibold text-navy-950 transition hover:brightness-110"
-          >
-            Apply as Hacker
-          </Link>
-          <Link
-            href="/mentor"
-            className="rounded-lg border border-white/30 px-6 py-3 font-semibold text-white transition hover:border-accent-yellow hover:text-accent-yellow"
-          >
-            Become a Mentor
-          </Link>
-          <Link
-            href="/volunteer"
-            className="rounded-lg border border-white/30 px-6 py-3 font-semibold text-white transition hover:border-accent-yellow hover:text-accent-yellow"
-          >
-            Volunteer
-          </Link>
+          <HeroCTAs />
         </div>
       </div>
     </section>

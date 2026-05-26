@@ -2,21 +2,22 @@
 
 import { Suspense } from "react";
 import { useRouter } from "next/navigation";
-import { clearDemoSession } from "@/lib/demo-session";
+import { useAuth } from "@/components/auth/AuthProvider";
 import { CheckInPanel } from "@/components/check-in/CheckInPanel";
 
 export function CheckInStaffContent() {
   const router = useRouter();
+  const { logout } = useAuth();
 
   function signOut() {
-    clearDemoSession();
-    router.replace("/demo/login");
+    logout();
+    router.replace("/");
   }
 
   return (
     <div className="mx-auto max-w-md">
       <div className="mb-6 flex items-center justify-between">
-        <p className="text-sm text-text-muted">Demo staff scanner</p>
+        <p className="text-sm text-text-muted">Staff scanner</p>
         <button
           type="button"
           onClick={signOut}
@@ -26,7 +27,7 @@ export function CheckInStaffContent() {
         </button>
       </div>
       <h1 className="mb-2 text-center font-display text-3xl font-bold text-navy-900">
-        Volunteer check-in (demo)
+        Volunteer check-in
       </h1>
       <p className="mb-8 text-center text-sm text-text-muted">
         Scan a ticket QR or enter an 8-character code to validate and check in

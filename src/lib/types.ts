@@ -20,14 +20,21 @@ export type Application = {
   checkedInBy?: string;
 };
 
-export type DemoPersonaId = "mark" | "eve" | "allen";
-
 export type SessionRole = "attendee" | "staff";
 
-export type DemoSession = {
-  personaId: DemoPersonaId;
-  sessionRole: SessionRole;
-  applicationId: string;
+export type UserAccount = {
+  email: string;
+  password: string;
+  fullName: string;
+  role: SessionRole;
+  applicationId?: string;
+};
+
+export type AuthSession = {
+  email: string;
+  role: SessionRole;
+  fullName: string;
+  applicationId?: string;
 };
 
 export type QRPayload = {

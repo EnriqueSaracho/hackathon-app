@@ -1,4 +1,5 @@
 import type { Application } from "./types";
+import { seedDemoAccounts } from "./auth";
 
 const APPLICATIONS_KEY = "viltrumhacks:applications:v1";
 const META_KEY = "viltrumhacks:meta:v1";
@@ -72,7 +73,7 @@ const SEED_APPLICATIONS: Application[] = [
     role: "hacker",
     createdAt: "2025-08-01T12:00:00.000Z",
     fullName: "Mark Grayson (Demo)",
-    email: "demo1@viltrumhacks.test",
+    email: "mark@viltrumhacks.test",
     school: "Pacific Heights University",
     experienceLevel: "intermediate",
     teamPreference: "solo",
@@ -84,7 +85,7 @@ const SEED_APPLICATIONS: Application[] = [
     role: "mentor",
     createdAt: "2025-08-01T12:00:00.000Z",
     fullName: "Atom Eve (Demo)",
-    email: "demo2@viltrumhacks.test",
+    email: "eve@viltrumhacks.test",
     school: "Pacific Heights University",
     experienceLevel: "advanced",
     agreedToCoC: true,
@@ -95,7 +96,7 @@ const SEED_APPLICATIONS: Application[] = [
     role: "volunteer",
     createdAt: "2025-08-01T12:00:00.000Z",
     fullName: "Allen the Alien (Demo)",
-    email: "demo3@viltrumhacks.test",
+    email: "allen@viltrumhacks.test",
     school: "Pacific Heights University",
     experienceLevel: "beginner",
     agreedToCoC: true,
@@ -117,6 +118,8 @@ export function seedApplications(): void {
     }
     sessionStorage.setItem(APPLICATIONS_KEY, JSON.stringify(apps));
     sessionStorage.setItem(META_KEY, JSON.stringify({ seeded: true }));
+
+    seedDemoAccounts();
   } catch {
     // ignore storage errors
   }

@@ -34,16 +34,10 @@ export function Footer() {
           <div>
             <h4 className="text-sm font-semibold text-white">Event</h4>
             <Link
-              href="/demo/login?next=/check-in"
+              href="/check-in"
               className="mt-2 block text-sm hover:text-accent-yellow"
             >
-              Volunteer check-in (demo)
-            </Link>
-            <Link
-              href="/demo/login"
-              className="mt-1 block text-sm hover:text-accent-yellow"
-            >
-              Demo login
+              Volunteer check-in
             </Link>
             <Link
               href="/mentor"

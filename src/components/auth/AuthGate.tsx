@@ -2,20 +2,22 @@
 
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-import { getDemoSession } from "@/lib/demo-session";
+import { useAuth } from "@/components/auth/AuthProvider";
 import type { SessionRole } from "@/lib/types";
 
-type DemoAuthGateProps = {
+type AuthGateProps = {
   requiredRole: SessionRole;
   children: React.ReactNode;
 };
 
-export function DemoAuthGate({ requiredRole, children }: DemoAuthGateProps) {
+export function AuthGate({ requiredRole, children }: AuthGateProps) {
   const router = useRouter();
+  const { session, loading } = useAuth();
   const [ready, setReady] = useState(false);
 
   useEffect(() => {
-    const session = getDemoSession();
+    if (loading) return;
+
     if (!session) {
       const next =
         typeof window !== "undefined"
@@ -23,17 +25,17 @@ export function DemoAuthGate({ requiredRole, children }: DemoAuthGateProps) {
           : requiredRole === "staff"
             ? "%2Fcheck-in"
             : "%2Fmy-ticket";
-      router.replace(`/demo/login?next=${next}`);
+      router.replace(`/login?next=${next}`);
       return;
     }
-    if (session.sessionRole !== requiredRole) {
-      router.replace(
-        session.sessionRole === "staff" ? "/check-in" : "/my-ticket",
-      );
+
+    if (session.role !== requiredRole) {
+      router.replace(session.role === "staff" ? "/check-in" : "/my-ticket");
       return;
     }
+
     setReady(true);
-  }, [requiredRole, router]);
+  }, [requiredRole, router, session, loading]);
 
   if (!ready) {
     return (

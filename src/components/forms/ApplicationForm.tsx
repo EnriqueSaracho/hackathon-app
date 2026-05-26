@@ -5,12 +5,14 @@ import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import type { ApplicationRole } from "@/lib/types";
+import { updateSession } from "@/lib/auth";
 import {
   emailExists,
   getApplications,
   saveApplication,
 } from "@/lib/storage";
 import { generateApplicationId, generateCheckInCode } from "@/lib/ids";
+import { useAuth } from "@/components/auth/AuthProvider";
 import {
   hackerSchema,
   mentorSchema,
@@ -37,6 +39,7 @@ function getSchema(role: ApplicationRole) {
 
 export function ApplicationForm({ role }: { role: ApplicationRole }) {
   const router = useRouter();
+  const { session, refresh } = useAuth();
   const [duplicateWarning, setDuplicateWarning] = useState(false);
   const schema = getSchema(role);
 
@@ -48,6 +51,8 @@ export function ApplicationForm({ role }: { role: ApplicationRole }) {
   } = useForm<FormData>({
     resolver: zodResolver(schema),
     defaultValues: {
+      fullName: session?.fullName ?? "",
+      email: session?.email ?? "",
       experienceLevel: "beginner",
       ...(role === "hacker" ? { teamPreference: "solo" as const } : {}),
     },
@@ -84,6 +89,8 @@ export function ApplicationForm({ role }: { role: ApplicationRole }) {
     };
 
     saveApplication(application);
+    updateSession({ applicationId });
+    refresh();
     router.push(`/apply/success?id=${applicationId}`);
   }
 

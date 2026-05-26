@@ -1,9 +1,14 @@
+"use client";
+
+import { AuthGate } from "@/components/auth/AuthGate";
 import { ApplicationForm } from "@/components/forms/ApplicationForm";
 
 export default function VolunteerPage() {
   return (
     <div className="bg-off-white px-6 py-16">
-      <ApplicationForm role="volunteer" />
+      <AuthGate requiredRole="attendee">
+        <ApplicationForm role="volunteer" />
+      </AuthGate>
     </div>
   );
 }
