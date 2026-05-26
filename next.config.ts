@@ -31,8 +31,11 @@ function getAllowedDevOrigins(): string[] {
 }
 
 const nextConfig: NextConfig = {
+  output: "export",
+  basePath:
+    process.env.NODE_ENV === "production" ? "/hackathon-app-m1" : "",
+  images: { unoptimized: true },
   reactCompiler: true,
-  // Dev-only: allows LAN IP access during `next dev`. Do not expose dev:lan to the public internet.
   allowedDevOrigins: getAllowedDevOrigins(),
 };
 
