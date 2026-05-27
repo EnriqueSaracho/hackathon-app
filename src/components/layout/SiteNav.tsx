@@ -21,15 +21,45 @@ function PrimaryAction({ onClick }: { onClick?: () => void }) {
     );
   }
 
+  if (session?.role === "organizer") {
+    return (
+      <>
+        <Link
+          href="/admin/participants"
+          className="rounded-lg bg-accent-yellow px-4 py-2 text-center text-sm font-semibold text-navy-950 transition hover:brightness-110"
+          onClick={onClick}
+        >
+          Admin
+        </Link>
+        <Link
+          href="/volunteer"
+          className="rounded-lg border border-white/30 px-4 py-2 text-center text-sm font-semibold text-white transition hover:border-accent-yellow hover:text-accent-yellow"
+          onClick={onClick}
+        >
+          Apply
+        </Link>
+      </>
+    );
+  }
+
   if (session?.role === "staff") {
     return (
-      <Link
-        href="/check-in"
-        className="rounded-lg bg-accent-yellow px-4 py-2 text-center text-sm font-semibold text-navy-950 transition hover:brightness-110"
-        onClick={onClick}
-      >
-        Check-in
-      </Link>
+      <>
+        <Link
+          href="/check-in"
+          className="rounded-lg bg-accent-yellow px-4 py-2 text-center text-sm font-semibold text-navy-950 transition hover:brightness-110"
+          onClick={onClick}
+        >
+          Check-in
+        </Link>
+        <Link
+          href="/volunteer"
+          className="rounded-lg border border-white/30 px-4 py-2 text-center text-sm font-semibold text-white transition hover:border-accent-yellow hover:text-accent-yellow"
+          onClick={onClick}
+        >
+          Apply
+        </Link>
+      </>
     );
   }
 

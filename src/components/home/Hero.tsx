@@ -52,18 +52,44 @@ function HeroCTAs() {
         >
           Admin Dashboard
         </Link>
+        <Link
+          href="/mentor"
+          className="rounded-lg border border-white/30 px-6 py-3 font-semibold text-white transition hover:border-accent-yellow hover:text-accent-yellow"
+        >
+          Become a Mentor
+        </Link>
+        <Link
+          href="/volunteer"
+          className="rounded-lg border border-white/30 px-6 py-3 font-semibold text-white transition hover:border-accent-yellow hover:text-accent-yellow"
+        >
+          Volunteer
+        </Link>
       </>
     );
   }
 
   if (session?.role === "staff") {
     return (
-      <Link
-        href="/check-in"
-        className="rounded-lg bg-accent-yellow px-6 py-3 font-semibold text-navy-950 transition hover:brightness-110"
-      >
-        Go to Check-in
-      </Link>
+      <>
+        <Link
+          href="/check-in"
+          className="rounded-lg bg-accent-yellow px-6 py-3 font-semibold text-navy-950 transition hover:brightness-110"
+        >
+          Go to Check-in
+        </Link>
+        <Link
+          href="/mentor"
+          className="rounded-lg border border-white/30 px-6 py-3 font-semibold text-white transition hover:border-accent-yellow hover:text-accent-yellow"
+        >
+          Become a Mentor
+        </Link>
+        <Link
+          href="/volunteer"
+          className="rounded-lg border border-white/30 px-6 py-3 font-semibold text-white transition hover:border-accent-yellow hover:text-accent-yellow"
+        >
+          Volunteer
+        </Link>
+      </>
     );
   }
 
